@@ -3,6 +3,8 @@ from django.shortcuts import render,redirect
 from models import UserInfo
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from hashlib import sha1
+
+import user_decorator
 # Create your views here.
 def register(request):
     context = {'title':'用户注册/login.'}
@@ -57,6 +59,7 @@ def login_handle(request):
                 red.set_cookie('uname','',max_age=-1)
             request.session['user_id']=user[0].id
             request.session['user_name']=uname
+            request.session.set_expiry(0)
             return red
         else:
             context = {'title':'用户登录','error_name':0,
@@ -69,12 +72,53 @@ def login_handle(request):
 
     return render(request,'tx_user/login.html',context)
 
+def logout(request):
+    request.session.flush()
+    return redirect('/')
+
+@user_decorator.login
 def user_center_info(request):
-    return render(request,'tx_user/user_center_info.html')
+    name = request.session['user_name']
+    info=UserInfo.objects.filter(uname=name)
+    uname=info[0].uname
+    uaddress=info[0].uaddress
+    uphone=info[0].uphone
+    context={'uname':uname,'uaddress':uaddress,'uphone':uphone}
+    return render(request,'tx_user/user_center_info.html',context)
 
+@user_decorator.login
 def user_center_site(request):
-    return render(request,'tx_user/user_center_site.html')
+    name = request.session['user_name']
+    info = UserInfo.objects.filter(uname=name)
+    ushou = info[0].ushou
+    uaddr = info[0].uaddress
+    uphone = info[0].uphone
+    context = {'ushou': ushou, 'uaddr': uaddr, 'uphone': uphone}
+    return render(request,'tx_user/user_center_site.html',context)
 
+@user_decorator.login
+def site(request):
+    post=request.POST
+    ushou=post.get('ushou')
+    uaddr=post.get('uaddr')
+    uyoubian=post.get('uyoubian')
+    uphone=post.get('uphone')
+    # print(uname)
+    # print(uaddr)
+
+    # print 6666666
+    print (request.session['user_id'])
+    user = UserInfo.objects.get(id=request.session['user_id'])
+    user.ushou=ushou
+    user.uaddress=uaddr
+    user.uyoubian=uyoubian
+    user.uphone=uphone
+    user.save()
+    context ={'ushou':ushou,'uaddr':uaddr, 'uyou':uyoubian, 'uphone':uphone,'user':user}
+    print(uyoubian)
+    return HttpResponseRedirect('/user/user_center_site/',context)
+
+@user_decorator.login
 def user_center_order(request):
     return render(request,'tx_user/user_center_order.html' )
 

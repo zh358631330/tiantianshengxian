@@ -10,6 +10,8 @@ urlpatterns=[
     url('^user_center_info/$',views.user_center_info),
     url('^user_center_site/$', views.user_center_site),
     url('^user_center_order/$', views.user_center_order),
+    url('^site/$',views.site),
+    url('^logout/$',views.logout)
     # url('cart/$', views.cart, name='cart'),
     # url('join/$',views.join),
 ]

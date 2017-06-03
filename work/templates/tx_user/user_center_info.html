@@ -1,55 +1,33 @@
 {%extends 'base.html'%}
 
-{%block body%}
-	<div class="header_con">
-		<div class="header">
-			<div class="welcome fl">欢迎来到天天生鲜!</div>
-			<div class="fr">
-				<div class="login_info fl">
-					欢迎您：<em>张 山</em>
-				</div>
-				<div class="login_btn fl">
-					<a href="login.html">登录</a>
-					<span>|</span>
-					<a href="register.html">注册</a>
-				</div>
-				<div class="user_link fl">
-					<span>|</span>
-					<a href="user_center_info.html">用户中心</a>
-					<span>|</span>
-					<a href="../tianxian/cart.html">我的购物车</a>
-					<span>|</span>
-					<a href="user_center_order.html">我的订单</a>
-				</div>
-			</div>
-		</div>		
-	</div>
-
+{%block search%}
 	<div class="search_bar clearfix">
-		<a href="../tx_goods/index.html" class="logo fl"><img src="/static/tianxian/images/logo.png"></a>
+		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
 		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
 		<div class="search_con fr">
 			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
 			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>		
+		</div>
 	</div>
+{%endblock search%}
+{%block content%}
 
 	<div class="main_con clearfix">
 		<div class="left_menu_con clearfix">
 			<h3>用户中心</h3>
 			<ul>
-				<li><a href="user_center_info.html" class="active">· 个人信息</a></li>
-				<li><a href="user_center_order.html">· 全部订单</a></li>
-				<li><a href="user_center_site.html">· 收货地址</a></li>
+				<li><a href="/user/user_center_info/" class="active">· 个人信息</a></li>
+				<li><a href="/user/user_center_order/">· 全部订单</a></li>
+				<li><a href="/user/user_center_site/">· 收货地址</a></li>
 			</ul>
 		</div>
 		<div class="right_content clearfix">
 				<div class="info_con clearfix">
 				<h3 class="common_title2">基本信息</h3>
-						<ul class="user_info_list">
-							<li><span>用户名：</span>18210569700</li>
-							<li><span>联系方式：</span>18210569700</li>
-							<li><span>联系地址：</span>北京市昌平区</li>			
+						<ul class="user_info_list ">
+							<li><span>用户名：</span>{{uname}}</li>
+							<li><span>联系方式：</span>{{uphone|default:''}}</li>
+							<li><span>联系地址：</span>{{uaddress|default:''}}</li>
 						</ul>
 				</div>
 				
@@ -57,8 +35,8 @@
 				<div class="has_view_list">
 					<ul class="goods_type_list clearfix">
 				<li>
-					<a href="../tianxian/detail.html"><img src="/static/tianxian/images/goods/goods003.jpg"></a>
-					<h4><a href="../tianxian/detail.html">大兴大棚草莓</a></h4>
+					<a href="../tx_goods/detail.html"><img src="/static/images/goods/goods003.jpg"></a>
+					<h4><a href="../tx_goods/detail.html">大兴大棚草莓</a></h4>
 					<div class="operate">
 						<span class="prize">￥16.80</span>
 						<span class="unit">16.80/500g</span>
@@ -67,7 +45,7 @@
 				</li>
 
 				<li>
-					<a href="#"><img src="/static/tianxian/images/goods/goods004.jpg"></a>
+					<a href="#"><img src="/static/images/goods/goods004.jpg"></a>
 					<h4><a href="#">吐鲁番梨光杏</a></h4>
 					<div class="operate">
 						<span class="prize">￥5.50</span>
@@ -77,7 +55,7 @@
 				</li>
 
 				<li>
-					<a href="#"><img src="/static/tianxian/images/goods/goods005.jpg"></a>
+					<a href="#"><img src="/static/images/goods/goods005.jpg"></a>
 					<h4><a href="#">黄肉桃</a></h4>
 					<div class="operate">
 						<span class="prize">￥10.00</span>
@@ -87,7 +65,7 @@
 				</li>
 
 				<li>
-					<a href="#"><img src="/static/tianxian/images/goods/goods006.jpg"></a>
+					<a href="#"><img src="/static/images/goods/goods006.jpg"></a>
 					<h4><a href="#">进口西梅</a></h4>
 					<div class="operate">
 						<span class="prize">￥28.80</span>
@@ -97,7 +75,7 @@
 				</li>
 
 				<li>
-					<a href="#"><img src="/static/tianxian/images/goods/goods007.jpg"></a>
+					<a href="#"><img src="/static/images/goods/goods007.jpg"></a>
 					<h4><a href="#">香梨</a></h4>
 					<div class="operate">
 						<span class="prize">￥6.45</span>
@@ -112,4 +90,4 @@
 
 
 
-{%endblock body%}
+{%endblock content%}
