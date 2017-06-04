@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		.btns input{
+			width: 100px;
+			height: 40px;
+			display: line-block;
+			background-color: cyan;
+			border:0;
+		}
+		.btns .current{
+			background-color: gold;
+		}
+		.cons{
+			width: 500px;
+			height: 300px;
+			position: relative;
+			overflow: hidden;
+		}
+		.cons div{
+			position: absolute;
+			left: 0;
+			width: 500px;
+			height: 300px;
+			background-color: gold;
+			display: block;
+			text-align: center;
+			line-height: 300px;
+			font-size: 30px;
+			background:url(images/001.jpg);
+			background-size: 622px 350px;
+
+		}
+		.cons div:nth-child(2){
+			position: absolute;
+			left: 500px;
+			background:url(images/002.jpg);
+			background-size: 622px 350px;
+		}
+		.cons div:nth-child(3){
+			position: absolute;
+			background:url(images/003.jpg);
+			background-size: 622px 350px;
+			left: 500px;
+		}
+		.cons .acrive{
+			display: block;
+
+		}
+
+	</style>
+	<script type="text/javascript" src='/static/js/jquery-1.12.4.min.js'></script>
+	<script type="text/javascript">
+		$(function(){
+			$btn = $('.btns a');
+			$div = $('.cons div');
+
+			$btn.click(function(){
+				$(this).addClass('current').siblings().removeClass('current');
+
+				// $div.eq($(this).index()).addClass('acrive').siblings().removeClass('acrive')
+				$div.eq($(this).index()).animate({'left':'0'},1000)
+				$div.eq($(this).index()).prevAll().animate({'left':'-500px'},1000)
+				$div.eq($(this).index()).nextAll().animate({'left':'500px'},1000)
+			})
+		})
+	</script>
+</head>
+<body>
+	<div class="btns">
+		{# <input type="button" value="01" class="current"> #}
+		{# <input type="button" value="02"> #}
+		{# <input type="button" value="03"> #}
+        <a href="#"  class="current">01</a>
+        <a href="#" >02</a>
+        <a href="#" >03</a>
+	</div>
+	<div class="cons">
+		<div class="acrive">这是第一部分的内容</div>
+		<div>这是第二部分的内容</div>
+		<div>这是第三部分的内容</div>
+	</div>
+.</body>
+</html>

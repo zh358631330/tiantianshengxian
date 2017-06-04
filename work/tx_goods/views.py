@@ -2,23 +2,21 @@
 from django.shortcuts import render
 from models import *
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 # Create your views here.
 def index(request):
-    t1_click = GoodsInfo.objects.filter(gtype_id=1).order_by('-gclick')[0:3]
-    t1_new = GoodsInfo.objects.filter(gtype_id=1).order_by('-id')[0:4]
-    t3_click = GoodsInfo.objects.filter(gtype_id=3).order_by('-gclick')[0:3]
-    t3_new = GoodsInfo.objects.filter(gtype_id=3).order_by('-id')[0:4]
-    t4_click = GoodsInfo.objects.filter(gtype_id=4).order_by('-gclick')[0:3]
-    t4_new = GoodsInfo.objects.filter(gtype_id=4).order_by('-id')[0:4]
-    t5_click = GoodsInfo.objects.filter(gtype_id=5).order_by('-gclick')[0:3]
-    t5_new = GoodsInfo.objects.filter(gtype_id=5).order_by('-id')[0:4]
-    t6_click = GoodsInfo.objects.filter(gtype_id=5).order_by('-gclick')[0:3]
-    t6_new = GoodsInfo.objects.filter(gtype_id=5).order_by('-id')[0:4]
-    context={'title':'首页', 't1_click':t1_click, 't1_new':t1_new,
-             't3_click':t3_click, 't3_new':t3_new,
-             't4_click':t4_click, 't4_new':t4_new,
-             't5_click':t5_click, 't5_new':t5_new,
-             't6_click':t6_click, 't6_new':t6_new}
+    type_list=TypeInfo.objects.all()
+    list = []
+    for type in type_list:
+        list.append({
+            'type':type,
+            'click_list': type.goodsinfo_set.order_by('-gclick')[0:3],
+            'new_list': type.goodsinfo_set.order_by('-id')[0:4]
+        })
+    context={'title':'首页',
+             'type_list':type_list,
+             'list':list
+            }
     return render(request,'tx_goods/index.html',context)
 def index2(request,tid):
     t1_click = GoodsInfo.objects.filter(gtype_id=2).order_by('-gclick')[0:3]
@@ -31,11 +29,42 @@ def index2(request,tid):
         news.append({'id':new.id,'title':new.gtitle, 'pic':new.gpic.name,'price':new.gprice})
     context = {'title':'主页','clicks':clicks,'news':news}
     return JsonResponse(context)
-def list(request):
-    t1_click = GoodsInfo.objects.filter(gtype_id=1).order_by('-id')[0:3]
-    t1_news =GoodsInfo.objects.filter(gtype_id=1).order_by('-id')
-    context={'title':'水果','t1_click':t1_click, 't1_news':t1_news}
+def list(request,tid,lid,sid):
+    t1_click = GoodsInfo.objects.filter(gtype_id=int(tid)).order_by('-id')
+    new = GoodsInfo.objects.filter(gtype_id=int(tid))
+    if sid == '1':
+        t1_list =new.order_by('-id')
+    elif sid == '2':
+        t1_list = new.order_by('-gprice')
+    elif sid == '3':
+        t1_list = new.order_by('-gclick')
+    paginator=Paginator(t1_list,1)
+    page=paginator.page(int(lid))
+    type_name = TypeInfo.objects.get(id=int(tid)).ttitle
+
+    context={'title':type_name,'t1_click':t1_click, 'page':page,'lid':lid,'tid':tid}
     return render(request,'tx_goods/list.html',context)
 
-def detail(request):
-    return render(request,'tx_goods/detail.html')
+def sort(request,tid,lid):
+
+    t1_click = GoodsInfo.objects.filter(gtype_id=int(tid)).order_by('-id')[0:2]
+    t1_list = GoodsInfo.objects.filter(gtype_id=int(tid)).order_by('-id')
+    paginator = Paginator(t1_list, 5)
+    page = paginator.page(lid)
+    type_name = TypeInfo.objects.get(id=int(tid)).ttitle
+
+    context = {'title': type_name, 't1_click': t1_click, 'page': page, 'lid': lid, 'tid': tid}
+    return JsonResponse(context)
+
+def ceshi(request):
+    return render(request,'tx_goods/ceshi.html')
+
+def detail(request,tid,lid):
+    goods= GoodsInfo.objects.get(id=lid)
+    gtype = TypeInfo.objects.filter(goodsinfo__id=lid)[0]
+    t1_click = GoodsInfo.objects.filter(gtype_id=int(tid)).order_by('-id')[0:2]
+    context={'title':'商品详情',
+             'goods':goods,
+             't1_click':t1_click
+             }
+    return render(request,'tx_goods/detail.html',context)

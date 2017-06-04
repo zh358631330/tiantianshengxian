@@ -6,10 +6,10 @@
 		$(function(){
 		   $.get('/index22/',function (data) {
 		       $.each(data.clicks,function (i,n) {
-				   $('.subtitle:eq(1)').append('<a href="#">'+n.title.substring(0,10)+'...</a>')
+				   $('.subtitle:eq(0)').append('<a href="#">'+n.title.substring(0,10)+'...</a>')
                })
 			   $.each(data.news,function (i, n) {
-				   $('.goods_list:eq(1)').append('<li><h4><a href="#">'+n.title+'</a></h4>' +
+				   $('.goods_list:eq(0)').append('<li><h4><a href="#">'+n.title+'</a></h4>' +
 					   '<a href="#"><img src="/static/'+ n.pic+'"></a> ' +
 					   '<div class="prize">¥ '+n.price+'</div> </li>')
                })
@@ -59,31 +59,7 @@
 		</div>
 	</div>
 
-	<div class="list_model">
-		<div class="list_title clearfix">
-			<h3 class="fl" id="model01">新鲜水果</h3>
-			<div class="subtitle fl">
-				<span>|</span>
-				{%for click in t1_click%}
-				<a href="#">{{click.gtitle|truncatechars:10}}</a>
-				{%endfor%}
-			</div>
-			<a href="/list/" class="goods_more fr" id="fruit_more">查看更多 ></a>
-		</div>
 
-		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="/static/images/banner01.jpg"></div>
-			<ul class="goods_list fl">
-				{%for new in t1_new%}
-				<li>
-					<h4><a href="#">{{new.gtitle}}</a></h4>
-					<a href="#"><img src="/static/{{new.gpic}}/"></a>
-					<div class="prize">¥{{new.gprice}}</div>
-				</li>
-				{%endfor%}
-			</ul>
-		</div>
-	</div>
 
 	<div class="list_model">
 		<div class="list_title clearfix">
@@ -91,7 +67,7 @@
 			<div class="subtitle fl">
 				<span>|</span>
 			</div>
-			<a href="#" class="goods_more fr">查看更多 ></a>
+			<a href="/list2_1/" class="goods_more fr">查看更多 ></a>
 		</div>
 
 		<div class="goods_con clearfix">
@@ -103,109 +79,36 @@
 		</div>
 	</div>
 
-	<div class="list_model">
-		<div class="list_title clearfix">
-			<h3 class="fl" id="model03">猪牛羊肉</h3>
-			<div class="subtitle fl">
-				<span>|</span>
-				{%for click in t3_click%}
-				<a href="#">{{click.gtitle|truncatechars:10}}</a>
-				{%endfor%}
+		{%for info in list%}
+			<div class="list_model">
+			<div class="list_title clearfix">
+				<h3 class="fl" id="model03">type.ttitle</h3>
+				<div class="subtitle fl">
+					<span>|</span>
+					{%for click in info.click_list%}
+					<a href="#">{{click.gtitle|truncatechars:10}}</a>
+					{%endfor%}
+				</div>
+				<a href="/list{{forloop.counter}}_1/" class="goods_more fr">查看更多 ></a>
 			</div>
-			<a href="#" class="goods_more fr">查看更多 ></a>
-		</div>
 
-		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="/static/images/banner03.jpg"></div>
-			<ul class="goods_list fl">
-				{%for new in t3_new%}
-				<li>
-					<h4><a href="#">{{new.gtitle}}</a></h4>
-					<a href="#"><img src="/static/{{new.gpic}}/"></a>
-					<div class="prize">¥{{new.gprice}}</div>
-				</li>
-				{%endfor%}
-			</ul>
-		</div>
-	</div>
-
-	<div class="list_model">
-		<div class="list_title clearfix">
-			<h3 class="fl" id="model04">禽类蛋品</h3>
-			<div class="subtitle fl">
-				<span>|</span>
-				{%for click in t4_click%}
-				<a href="#">{{click.gtitle|truncatechars:10}}</a>
-				{%endfor%}
+			<div class="goods_con clearfix">
+				<div class="goods_banner fl"><img src="/static/images/banner0{{forloop.counter}}.jpg"></div>
+				<ul class="goods_list fl">
+					{%for new in info.new_list%}
+					<li>
+						<h4><a href="#">{{new.gtitle}}</a></h4>
+						<a href="#"><img src="/static/{{new.gpic}}/"></a>
+						<div class="prize">¥{{new.gprice}}</div>
+					</li>
+					{%endfor%}
+				</ul>
 			</div>
-			<a href="#" class="goods_more fr">查看更多 ></a>
 		</div>
+	{%endfor%}
 
-		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="/static/images/banner04.jpg"></div>
-			<ul class="goods_list fl">
-				{%for new in t4_new%}
-				<li>
-					<h4><a href="#">{{new.gtitle}}</a></h4>
-					<a href="#"><img src="/static/{{new.gpic}}/"></a>
-					<div class="prize">¥{{new.gprice}}</div>
-				</li>
-				{%endfor%}
-			</ul>
-		</div>
-	</div>
 
-	<div class="list_model">
-		<div class="list_title clearfix">
-			<h3 class="fl" id="model05">新鲜蔬菜</h3>
-			<div class="subtitle fl">
-				<span>|</span>
-				{%for click in t5_click%}
-				<a href="#">{{click.gtitle|truncatechars:10}}</a>
-				{%endfor%}
-			</div>
-			<a href="#" class="goods_more fr">查看更多 ></a>
-		</div>
 
-		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="/static/images/banner05.jpg"></div>
-			<ul class="goods_list fl">
-				{%for new in t5_new%}
-				<li>
-					<h4><a href="#">{{new.gtitle}}</a></h4>
-					<a href="#"><img src="/static/{{new.gpic}}/"></a>
-					<div class="prize">¥{{new.gprice}}</div>
-				</li>
-				{%endfor%}
-			</ul>
-		</div>
-	</div>
-
-	<div class="list_model">
-		<div class="list_title clearfix">
-			<h3 class="fl" id="model06">速冻食品</h3>
-			<div class="subtitle fl">
-				<span>|</span>
-				{%for click in t6_click%}
-				<a href="#">{{click.gtitle|truncatechars:10}}</a>
-				{%endfor%}
-			</div>
-			<a href="#" class="goods_more fr">查看更多 ></a>
-		</div>
-
-		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="/static/images/banner06.jpg"></div>
-			<ul class="goods_list fl">
-				{%for new in t6_new%}
-				<li>
-					<h4><a href="#">{{new.gtitle}}</a></h4>
-					<a href="#"><img src="/static/{{new.gpic}}/"></a>
-					<div class="prize">¥{{new.gprice}}</div>
-				</li>
-				{%endfor%}
-			</ul>
-		</div>
-	</div>
 
 {%endblock content%}
 {%block bottom%}
