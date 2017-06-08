@@ -21,5 +21,7 @@ urlpatterns = [
     url('^user/', include('tx_user.urls')),
     url('^',include('tx_goods.urls')),
     url('^cart/', include('tx_cart.urls')),
+    url(r'^search/', include('haystack.urls')),
+    url('^order/',include('tx_order.urls'))
 
 ]

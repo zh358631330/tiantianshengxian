@@ -1,42 +1,102 @@
-{%extends 'base.html'%}
+{%extends 'tx_user/base.html'%}
+{%block head%}
+<script>
+	function cart_del(cart_id) {
+	    if(confirm('你确定要删除吗?')){
+		$.get('/cart/del/',{'id':cart_id},function (data) {
+			if(data.data == 'ok'){
+			$('#'+cart_id).remove();
+			total()
+			}
+		})}
+    }
+    function total() {
+    //计算小计和总计
+		count = $('.cart_list_td').length;
+		$('.total_count em').text(count);
+		totle = 0;
+		count_all = 0;
+		$('.cart_list_td').each(function () {
+			price = parseFloat($(this).children('.col05').find('em').text());
+			count1 = parseInt($(this).find('.num_show').val());
+			totle1 = price*count1;
+			$(this).children('.col07').text(totle1.toFixed(2));
+			if ($(this).children('.col01').children('input').prop('checked')){
+			    totle += totle1;
+			}
+			count_all += count1
+		});
+		$('.settlements .col03 em').text(totle.toFixed(2));
+		$('.settlements .col03 b').text(count_all);
+    }
+$(function(){
+	total();
+	$('#check_all').change(function () {
+		$(':checkbox:not(#check_all)').prop('checked',$(this).prop('checked'));
+		total();
+    });
+	//判断
+	$(':checkbox:not(#check_all)').change(function () {
+		if($(':checkbox:not(#check_all)').length == $(':checked:not(#check_all)').length){
+		    $('#check_all').prop('checked',true)
+		}else{
+		    $('#check_all').prop('checked',false)
+		}
+		total();
+    });
 
-{%block body%}
-	<div class="header_con">
-		<div class="header">
-			<div class="welcome fl">欢迎来到天天生鲜!</div>
-			<div class="fr">
-				{%if request.session.user_name|default:'' != ''%}
-				<div class="login_info fl">
-					欢迎您：<em>{{request.session.user_name}}</em>
-					<a href="index.html" id="out">退出</a>
-				</div>
-				{%else%}
-				<div class="login_btn fl">
-					<a href="/user/login">登录</a>
-					<span>|</span>
-					<a href="/user/register/">注册</a>
-				</div>
-				{%endif%}
-				<div class="user_link fl">
-					<span>|</span>
-					<a href="/user/user_center_info/">用户中心</a>
-					<span>|</span>
-					<a href="/cart/">我的购物车</a>
-					<span>|</span>
-					<a href="/user/user_center_order/">我的订单</a>
-				</div>
-			</div>
-		</div>		
-	</div>
+	$('.add').click(function () {
+		count = parseInt($(this).next().val());
+		count +=1;
+		$(this).next().val(count).blur();
+		total();
+    });
 
-	<div class="search_bar clearfix">
-		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
-		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;购物车</div>
-		<div class="search_con fr">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>		
-	</div>
+	$('.minus').click(function () {
+  		count = parseInt($(this).prev().val());
+		count --;
+		$(this).prev().val(count).blur();
+		total();
+    });
+
+	$('.num_show').blur(function () {
+	    the = $(this)
+		if(isNaN(the.val())){
+			count = 1
+	    }else{
+			count = parseInt(the.val())
+		}
+		//alert($(this).val())
+		ckucun = parseInt(the.parents('.col06').prevAll('.col03').children('em').text());
+		if (count <=1){
+		    count = 1
+		}
+		else if(count > ckucun){
+		    count = ckucun
+		}
+		id = parseInt(the.parents('.cart_list_td').prop('id'));
+		$.get('/cart/count_change/',{'id':id, 'count':count},function (data) {
+			if(data.data == 'ok'){
+			    $(this);
+				the.val(data.count);
+				total()
+			}
+		})
+    });
+
+	//$('#order').click(function () {
+	//    ids='';
+	//   $(':checked:not(#check_all)').each(function () {
+	//		id = parseInt($(this).val());
+	//		ids = ids + id +','
+  	//      });
+	//
+	//	$.get('/order/',{'ids':ids})
+    //})
+});
+</script>
+{%endblock head%}
+{%block content%}
 
 	<div class="total_count">全部商品<em>2</em>件</div>	
 	<ul class="cart_list_th clearfix">
@@ -47,46 +107,33 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
-	<ul class="cart_list_td clearfix">
-		<li class="col01"><input type="checkbox" name="" checked></li>
-		<li class="col02"><img src="/static/images/goods/goods012.jpg"></li>
-		<li class="col03">奇异果<br><em>25.80元/500g</em></li>
-		<li class="col04">500g</li>
-		<li class="col05">25.80元</li>
-		<li class="col06">
-			<div class="num_add">
-				<a href="javascript:;" class="add fl">+</a>
-				<input type="text" class="num_show fl" value="1">	
-				<a href="javascript:;" class="minus fl">-</a>	
-			</div>
-		</li>
-		<li class="col07">25.80元</li>
-		<li class="col08"><a href="javascript:;">删除</a></li>
-	</ul>
-
-	<ul class="cart_list_td clearfix">
-		<li class="col01"><input type="checkbox" name="" checked></li>
-		<li class="col02"><img src="/static/tianxian/images/goods/goods003.jpg"></li>
-		<li class="col03">大兴大棚草莓<br><em>16.80元/500g</em></li>
-		<li class="col04">500g</li>
-		<li class="col05">16.80元</li>
-		<li class="col06">
-			<div class="num_add">
-				<a href="javascript:;" class="add fl">+</a>
-				<input type="text" class="num_show fl" value="1">	
-				<a href="javascript:;" class="minus fl">-</a>	
-			</div>
-		</li>
-		<li class="col07">16.80元</li>
-		<li class="col08"><a href="javascript:;">删除</a></li>
-	</ul>
-	
+<form method="get" action="/order/">
+	{%for cart in cart_list%}
+		<ul class="cart_list_td clearfix" id="{{cart.id}}">
+			<li class="col01"><input type="checkbox" name="cart.id" checked="checked" value="{{cart.id}}"></li>
+			<li class="col02"><img src="/static/{{cart.goods.gpic}}"></li>
+			<li class="col03">{{cart.goods.gtitle}}<br>库存<em>{{cart.goods.gkucun}}</em></li>
+			<li class="col04">{{cart.goods.gunit}}</li>
+			<li class="col05"><em>{{cart.goods.gprice}}</em>元</li>
+			<li class="col06">
+				<div class="num_add">
+					<a href="javascript:;" class="add fl">+</a>
+					<input type="text" class="num_show fl" value="{{cart.count}}">
+					<a href="javascript:;" class="minus fl">-</a>
+				</div>
+			</li>
+			<li class="col07"></li>
+			<li class="col08"><a href="javascript:cart_del( {{cart.id}} );">删除</a></li>
+		</ul>
+	{%empty%}
+		'暂未添加商品'
+	{%endfor%}
 
 	<ul class="settlements">
-		<li class="col01"><input type="checkbox" name="" checked=""></li>
+		<li class="col01"><input type="checkbox" checked="checked" id="check_all"></li>
 		<li class="col02">全选</li>
-		<li class="col03">合计(不含运费)：<span>¥</span><em>42.60</em><br>共计<b>2</b>件商品</li>
-		<li class="col04"><a href="../tianxian/place_order.html">去结算</a></li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em>42.60</em><br>共计<b>0</b>件商品</li>
+		<li class="col04" ><input id="order" type="submit" value="去结算"></li>
 	</ul>
-
-{%endblock body%}
+</form>
+{%endblock content%}

@@ -2,6 +2,7 @@
 {%block head%}
 	<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/static/js/slide.js"></script>
+{%comment%}
 	<script>
 		$(function(){
 		   $.get('/index22/',function (data) {
@@ -16,7 +17,9 @@
            })
 		});
 	</script>
+{%endcomment%}
 {%endblock head%}
+
 {%block content%}
 
 
@@ -60,14 +63,14 @@
 	</div>
 
 
-
+{%comment%}
 	<div class="list_model">
 		<div class="list_title clearfix">
 			<h3 class="fl" id="model02">海鲜水产</h3>
 			<div class="subtitle fl">
 				<span>|</span>
 			</div>
-			<a href="/list2_1/" class="goods_more fr">查看更多 ></a>
+			<a href="/list2_1_1/" class="goods_more fr">查看更多 ></a>
 		</div>
 
 		<div class="goods_con clearfix">
@@ -78,18 +81,19 @@
 			</ul>
 		</div>
 	</div>
+{%endcomment%}
 
 		{%for info in list%}
 			<div class="list_model">
 			<div class="list_title clearfix">
-				<h3 class="fl" id="model03">type.ttitle</h3>
+				<h3 class="fl" id="model03">{{info.type}}</h3>
 				<div class="subtitle fl">
 					<span>|</span>
 					{%for click in info.click_list%}
-					<a href="#">{{click.gtitle|truncatechars:10}}</a>
+					<a href="/detail_{{click.id}}/">{{click.gtitle|truncatechars:10}}</a>
 					{%endfor%}
 				</div>
-				<a href="/list{{forloop.counter}}_1/" class="goods_more fr">查看更多 ></a>
+				<a href="/list{{forloop.counter}}_1_1/" class="goods_more fr">查看更多 ></a>
 			</div>
 
 			<div class="goods_con clearfix">
@@ -97,8 +101,8 @@
 				<ul class="goods_list fl">
 					{%for new in info.new_list%}
 					<li>
-						<h4><a href="#">{{new.gtitle}}</a></h4>
-						<a href="#"><img src="/static/{{new.gpic}}/"></a>
+						<h4><a href="/detail_{{new.id}}/">{{new.gtitle}}</a></h4>
+						<a href="/detail_{{new.id}}/"><img src="/static/{{new.gpic}}/"></a>
 						<div class="prize">¥{{new.gprice}}</div>
 					</li>
 					{%endfor%}
